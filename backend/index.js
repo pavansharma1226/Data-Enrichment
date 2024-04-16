@@ -19,7 +19,7 @@ const geminiConfig = {
   temperature: 0.9,
   topP: 1,
   topK: 1,
-  maxOutputTokens: 31000
+  maxOutputTokens: 4096
 };
  
 const geminiModel = googleAI.getGenerativeModel({
@@ -31,12 +31,12 @@ let finaldata = "";
  
 const generate = async (data) => {
   try {
-    const prompt = `Enrich the data without loss and adding some relevant data : ${data}`;
+    const prompt = `Enrich the data without loss and adding some relevant data and formatting: ${data}`;
     const result = await geminiModel.generateContent(prompt);
     const response = result.response;
     // console.log(response.text());
     finaldata = response.text();
-    console.log("Final Data : " + finaldata);
+    // console.log("Final Data : " + finaldata);
   } catch (error) {
     console.log("response error", error);
     return(error)
@@ -73,7 +73,7 @@ app.use(express.urlencoded({ extended: true }));
           // // Parse PDF buffer to extract text
           // const pdfText = await extractTextFromPDF(pdfBuffer);
           const pdfText = await extractTextFromPDF(pdfData);
-          console.log("hello"+ pdfText);
+          // console.log("hello"+ pdfText);
           await generate(pdfText);
           // console.log(finaldata);
           res.json({ text: finaldata });
